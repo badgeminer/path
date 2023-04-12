@@ -4,9 +4,11 @@ from pathfinding.core.grid import Grid
 from pathfinding.finder.a_star import AStarFinder
 
 matrix = [
-  [1, 1, 1, 1],
-  [1, 0, 1, 1],
-  [1, 1, 1, 1]
+  [1, 1, 1, 1, 1],
+  [1, 0, 1, 1, 1],
+  [1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1]
 ]
 p = pathy.matrix(matrix)
 grid = Grid(matrix=matrix)
@@ -33,7 +35,7 @@ while True:
         for y in range(len(matrix[x])):
             if matrix[x][y]:
                 scr.fill((255,255,255),(x*20,y*20,20,20))
-            scr.blit(font.render(str(p.mtrxdz[x][y]),True,(255,255,255),(0,0,0)),((x*20)+5,(y*20)+5))
+            scr.blit(font.render(str(p.mtrxdz[x][y]),True,(255,255,255),(0,0,0)),((x*20)+1,(y*20)+1))
 
     pygame.display.flip()
     for e in pygame.event.get():
