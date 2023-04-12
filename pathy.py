@@ -14,8 +14,7 @@ class matrix:
                     dzt = 100
                     for x in range(len(self.mtrx)):
                         for y in range(len(self.mtrx[x])):
-                            
-                            if ((X == x) and (Y == y)) or (self.mtrx[X][Y]): 
+                            if ((X == x) and (Y == y)) or (self.mtrx[X][Y] >= 1): 
                                 pass
                             else:
                                 d = pygame.math.Vector2(X, Y).distance_to((x,y))
