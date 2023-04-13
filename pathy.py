@@ -11,6 +11,11 @@ class rqState(enum.Enum):
     done = 2
     FAILED = 3
 
+class pathState(enum.Enum):
+    no_path = 0
+    gen = 1
+    run = 2
+
 mx = pygame.Color(0,255,0)
 mn = pygame.Color(0,0,255)
 
@@ -117,3 +122,42 @@ class matrix:
             self.mtrxdz.append(R)
         self.most = mpos
         self.mv = most
+
+
+class pathingGroup(pygame.sprite.AbstractGroup):
+    def update(self, runer:pathRUN,mtrx:matrix,grid:Grid):
+        """call the update method of every member sprite
+
+        Group.update(*args, **kwargs): return None
+
+        Calls the update method of every member sprite. All arguments that
+        were passed to this method are passed to the Sprite update function.
+
+        """
+        for sprite in self.sprites():
+            sprite.path(runer,mtrx,grid)
+
+class PathingSprite(pygame.sprite.Sprite):
+
+    # Constructor. Pass in the color of the block,
+    # and its x and y position
+    def __init__(self, img):
+       # Call the parent class (Sprite) constructor
+       pygame.sprite.Sprite.__init__(self)
+
+       # Create an image of the block, and fill it with a color.
+       # This could also be an image loaded from the disk.
+       self.image = img
+       self.pst = pathState.no_path
+       self.paths = None
+
+       # Fetch the rectangle object that has the dimensions of the image
+       # Update the position of this object by setting the values of rect.x and rect.y
+       self.rect:pygame.Rect = self.image.get_rect()
+    def path(self, runer:pathRUN,mtrx:matrix,grid:Grid) -> None:
+        if self.pst == pathState.no_path:
+            self.paths = pathRQ(grid,self.rect.center,mtrx.most)
+            runer.queue.put(self.paths)
+            self.pst = pathState.gen
+
+

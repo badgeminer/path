@@ -4,8 +4,8 @@ from pathfinding.core.grid import Grid
 from pathfinding.finder.a_star import AStarFinder
 rndm = [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 #random.seed(2)
-#random.seed(1545455545554)
-random.seed(0xffffffffffafffffffbbbffffffffffff)
+random.seed(1545455545554)
+#random.seed("gfsjdgfhjghjjs")
 """matrix = [
   [1, 1, 1, 1, 1, 1, 0, 1],
   [1, 0, 1, 1, 1, 1, 1, 1],
@@ -44,10 +44,11 @@ pygame.init()
 scr = pygame.display.set_mode((500,500))
 
 font = pygame.font.Font(None, 12)
-
+clock = pygame.time.Clock()
 while True:
+    clock.tick(30)
     scr.fill((0,0,0))
-    
+    scr.blit(font.render(str(clock.get_fps()),True,(255,255,255)),(10,485))
 
 
     for y in range(len(matrix)):
