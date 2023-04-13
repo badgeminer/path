@@ -1,5 +1,6 @@
 import numpy as np
 import pygame,threading,queue,enum
+import time
 from pathfinding.core.diagonal_movement import DiagonalMovement
 from pathfinding.core.grid import Grid
 from pathfinding.finder.a_star import AStarFinder
@@ -8,16 +9,20 @@ class rqState(enum.Enum):
     waiting = 0
     in_progress = 1
     done = 2
+    FAILED = 3
 
 mx = pygame.Color(0,255,0)
 mn = pygame.Color(0,0,255)
+
 
 class pathRQ:
     def __init__(self,grid:Grid,s,e) -> None:
         self.st = rqState.waiting
         self.g  = grid
         self.g.cleanup()
-        self.s,self.e = s,e
+        self.s,self.e = grid.node(*s),grid.node(*e)
+        self.S = s
+        self.St = ((s[0]*20)+10,(s[1]*20)+10)
         self.pth = None
 
 class pathRUN:
@@ -28,13 +33,18 @@ class pathRUN:
     def run(self):
         while True:
             r:pathRQ = self.queue.get()
+            r.g.cleanup()
             r.st = rqState.in_progress
             finder = AStarFinder(diagonal_movement=DiagonalMovement.only_when_no_obstacle)
             path, runs = finder.find_path(r.s, r.e, r.g)
             print('operations:', runs, 'path length:', len(path))
             print(r.g.grid_str(path=path, start=r.s, end=r.e))
             r.pth = path
-            r.st = rqState.done
+            if len(path) == 0: 
+                r.st = rqState.FAILED
+            else:
+                r.st = rqState.done
+            time.sleep(1)
 
 
 class matrix:
@@ -63,7 +73,13 @@ class matrix:
         for r in range(len(self.mtrx)):
             R = []
             for i in range(len(self.mtrx[r])):
-                R.append(self.mtrxdz[r][i])
+                if self.mtrxdz[r][i] > 0:
+                    V = ((self.mv)-(self.mtrxdz[r][i]+0.1))*10
+                    if V <= 0:
+                        V = 1
+                    R.append(V)
+                else:
+                    R.append(0)
             g.append(R)
         return g
 
@@ -71,7 +87,7 @@ class matrix:
 
 
     def dist(self):
-        print(self.mtrx)
+        #print(self.mtrx)
         most = 0
         mpos = (-1,-1)
         for Y in range(len(self.mtrx)):
@@ -87,11 +103,12 @@ class matrix:
                                 d = pygame.math.Vector2(X, Y).distance_to((x,y))
                                 if d <= dzt:
                                     dzt = d
-                                    print(d)
+                                    #print(d)
                                 else: 
-                                  print(d)
+                                  #print(d)
+                                  pass
                 else:
-                    print(self.mtrx[Y][X])
+                    #print(self.mtrx[Y][X])
                     dzt = 0.0
                 if dzt > most:
                     most = dzt
