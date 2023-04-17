@@ -4,8 +4,8 @@ from pathfinding.core.grid import Grid
 from pathfinding.finder.a_star import AStarFinder
 rndm = [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 #random.seed(2)
-random.seed(1545455545554)
-#random.seed("gfsjdgfhjghjjs")
+#random.seed(1545455545554)
+random.seed("gfsjdgfhjghjjs")
 """matrix = [
   [1, 1, 1, 1, 1, 1, 0, 1],
   [1, 0, 1, 1, 1, 1, 1, 1],
